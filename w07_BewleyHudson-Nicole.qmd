@@ -1,0 +1,113 @@
+---
+title: "Data Wrangling with R"
+subtitle: "IBM 320 Section 02"
+author: "Jae Jung"
+date: "today"
+format: 
+    html:
+        theme: cosmo
+        toc: true
+        toc-depth: 3
+        toc-location: right
+        embed-resources: true
+execute: 
+  freeze: auto
+---
+
+::: callout-note
+**Note:** This codebook will follow the structure and content of the content of the published codebook for the project: https://jmjung.quarto.pub/m05-1-principles-data-wrangling-with-tidyverse-in-r/
+:::
+
+# Overview 
+
+## Learning Outcomes
+
+> By the end of this module you will be able to: 
+
+-  Describe the concept of Data Wrangling.
+-  Describe how Tibbles are different from data frames
+-  Explain how to convert wide or long data to “Tidy” data
+Explain how to merge relational data sets using join -  functions. (Next module)
+-  Explain how to use grouped mutates and filter together.
+Be familiar with major dplyr functions for transforming -  data.
+-  Create a new variable with mutate() and case_when().
+Use the pipe operator to shape the data to prepare for -  analysis and visualization
+
+## The Textbook Chapters to Cover
+
+-  Ch3: Data Transformation
+-  Ch5: Data Tidying
+-  Ch13: Numbers
+
+# Introduction to Data Wrangling 
+
+## Loading the packages 
+
+> to add a code chunk, use the keyboard shortcut 'ctril + alt +i'
+
+```{r}
+library(tidyverse)
+```
+
+# What is Tidyverse?
+The tidyverse is a collection of R packages that share a common design philosophy and are designed to work together seamlessly. The tidyverse includes packages for data manipulation, visualization, and modeling, among other tasks. Some of the core packages in the tidyverse include:
+
+-  ggplot2: for data visualization
+
+-  dplyr: for data manipulation
+
+-  tidyr: for data tidying
+
+-  readr: for data import
+
+-  purrr: for functional programming
+
+-  tibble: for data frames
+
+-  stringr: for string manipulation
+
+-  forcats: for working with categorical variables
+
+## Initial Data Preparation and Exploration
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+```{r}
+flights_df <- nycflights13::flights
+flights_df
+```
+
+```{r}# R
+data(package = .packages(all.available = TRUE))
+```
+
+Note: use shift+alt+i to generate a 1. first
+
+1. airlines
+2. airports
+3. flights
+4. planes
+5. weather 
+
+```{r}
+# Load plotting/tidy packages
+library(tidyverse)    # loads ggplot2, dplyr, forcats, etc.
+
+flights <- nycflights13::flights
+
+flights |>
+  count(year, month) |>
+  arrange(desc(n)) |>
+  mutate(month = as_factor(month)) |>
+  ggplot(aes(x = month, y = n, fill = month)) +
+  geom_col(show.legend = FALSE, fill = "steelblue") +
+  labs(
+    x = "Month",
+    y = "Number of Flights",
+    title = "# of flights by Month during year 2013 in New York"
+  )
+```
+
