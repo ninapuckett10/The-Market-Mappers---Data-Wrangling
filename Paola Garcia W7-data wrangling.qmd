@@ -1,0 +1,171 @@
+
+title: "M05-1: Principles - Expanded In-depth Data Wrangling with Tidyverse in R"
+author: "Paola Garcia"
+date: '`r format(Sys.time())`'
+format: 
+  html: 
+    toc: true
+    toc-depth: 4
+    number-sections: true
+    code-line-numbers: true
+    code-fold: false
+    code-link: true
+    embed-resources: true
+    df-print: paged
+editor: visual
+execute: 
+  freeze: auto
+  warning: false  
+  error: true
+---
+
+# Introduction
+
+In this workshop, we learn how to wrangle data using the **Tidyverse** packages in R.  
+The most commonly used packages for data wrangling include **dplyr** and **tidyr**.  
+These packages help transform, organize, and clean data so it is easier to analyze.
+
+# Load Required Packages
+
+```{r}
+library(tidyverse)
+```
+
+# Example Dataset
+
+For demonstration purposes, we will use the built-in **mtcars** dataset.
+
+```{r}
+head(mtcars)
+```
+
+# Tidying Data with tidyr
+
+## pivot_longer()
+
+The `pivot_longer()` function converts data from **wide format to long format**.
+
+```{r}
+library(tidyr)
+
+long_data <- mtcars %>%
+  pivot_longer(
+    cols = mpg:hp,
+    names_to = "variable",
+    values_to = "value"
+  )
+
+head(long_data)
+```
+
+## pivot_wider()
+
+The `pivot_wider()` function converts data from **long format back to wide format**.
+
+```{r}
+wide_data <- long_data %>%
+  pivot_wider(
+    names_from = variable,
+    values_from = value
+  )
+
+head(wide_data)
+```
+
+## separate()
+
+The `separate()` function splits a column into multiple columns.
+
+```{r}
+df <- data.frame(name = c("John-Doe", "Jane-Smith"))
+
+separate(df, name, into = c("first", "last"), sep = "-")
+```
+
+## unite()
+
+The `unite()` function combines multiple columns into one.
+
+```{r}
+df2 <- data.frame(
+  first = c("John","Jane"),
+  last = c("Doe","Smith")
+)
+
+unite(df2, "full_name", first, last, sep = " ")
+```
+
+# Transforming Data with dplyr
+
+## select()
+
+The `select()` function chooses specific columns from a dataset.
+
+```{r}
+mtcars %>%
+  select(mpg, cyl, hp)
+```
+
+## filter()
+
+The `filter()` function keeps rows that meet a condition.
+
+```{r}
+mtcars %>%
+  filter(cyl == 6)
+```
+
+## arrange()
+
+The `arrange()` function sorts rows in a dataset.
+
+```{r}
+mtcars %>%
+  arrange(desc(mpg))
+```
+
+## mutate()
+
+The `mutate()` function creates a new column based on existing data.
+
+```{r}
+mtcars %>%
+  mutate(mpg_km = mpg * 0.425)
+```
+
+## group_by()
+
+The `group_by()` function groups the dataset for analysis.
+
+```{r}
+mtcars %>%
+  group_by(cyl)
+```
+
+## count()
+
+The `count()` function counts observations by group.
+
+```{r}
+mtcars %>%
+  count(cyl)
+```
+
+# Example of Grouped Analysis
+
+We can combine multiple functions together.
+
+```{r}
+mtcars %>%
+  group_by(cyl) %>%
+  summarize(
+    avg_mpg = mean(mpg),
+    avg_hp = mean(hp)
+  )
+```
+
+# Conclusion
+
+The **Tidyverse** provides powerful tools for data wrangling and transformation.  
+Functions from **tidyr** help tidy and restructure datasets, while functions from **dplyr** allow us to filter, select, and transform data efficiently.  
+These techniques are essential for preparing data before performing analysis or visualization.
